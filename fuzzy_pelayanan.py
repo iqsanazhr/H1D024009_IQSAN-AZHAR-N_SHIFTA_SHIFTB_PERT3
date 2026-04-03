@@ -2,6 +2,8 @@ import numpy as np
 import skfuzzy as fuzz
 from skfuzzy import control as ctrl
 import os
+import pandas as pd
+
 
 # 1. Definisi Variabel Input dan Output
 informasi = ctrl.Antecedent(np.arange(0, 101, 1), 'informasi')
@@ -24,22 +26,31 @@ kepuasan['cukup'] = fuzz.trapmf(kepuasan.universe, [150, 175, 250, 275])
 kepuasan['memuaskan'] = fuzz.trapmf(kepuasan.universe, [250, 275, 325, 350])
 kepuasan['sangat'] = fuzz.trapmf(kepuasan.universe, [325, 350, 400, 400])
 
-# 3. Definisi Aturan Fuzzy (Sesuai Aturan 1-13)
-rules = [
-    ctrl.Rule(informasi['tidak'] & persyaratan['tidak'] & petugas['tidak'] & sarpras['tidak'], kepuasan['tidak']),
-    ctrl.Rule(informasi['tidak'] & persyaratan['tidak'] & petugas['tidak'] & sarpras['cukup'], kepuasan['tidak']),
-    ctrl.Rule(informasi['tidak'] & persyaratan['tidak'] & petugas['tidak'] & sarpras['memuaskan'], kepuasan['tidak']),
-    ctrl.Rule(informasi['tidak'] & persyaratan['tidak'] & petugas['cukup'] & sarpras['tidak'], kepuasan['tidak']),
-    ctrl.Rule(informasi['tidak'] & persyaratan['tidak'] & petugas['cukup'] & sarpras['cukup'], kepuasan['tidak']),
-    ctrl.Rule(informasi['tidak'] & persyaratan['tidak'] & petugas['cukup'] & sarpras['memuaskan'], kepuasan['cukup']),
-    ctrl.Rule(informasi['tidak'] & persyaratan['tidak'] & petugas['memuaskan'] & sarpras['tidak'], kepuasan['tidak']),
-    ctrl.Rule(informasi['tidak'] & persyaratan['tidak'] & petugas['memuaskan'] & sarpras['cukup'], kepuasan['cukup']),
-    ctrl.Rule(informasi['tidak'] & persyaratan['tidak'] & petugas['memuaskan'] & sarpras['memuaskan'], kepuasan['cukup']),
-    ctrl.Rule(informasi['cukup'] & persyaratan['cukup'] & petugas['cukup'] & sarpras['memuaskan'], kepuasan['memuaskan']),
-    ctrl.Rule(informasi['cukup'] & persyaratan['cukup'] & petugas['memuaskan'] & sarpras['memuaskan'], kepuasan['memuaskan']),
-    ctrl.Rule(informasi['cukup'] & persyaratan['memuaskan'] & petugas['memuaskan'] & sarpras['memuaskan'], kepuasan['sangat']),
-    ctrl.Rule(informasi['memuaskan'] & persyaratan['memuaskan'] & petugas['memuaskan'] & sarpras['memuaskan'], kepuasan['sangat'])
-]
+# 3. Definisi Aturan Fuzzy (Membaca dari 81_fuzzy_rules.csv)
+mapping = {
+    'Tidak Memuaskan': 'tidak',
+    'Cukup Memuaskan': 'cukup',
+    'Memuaskan': 'memuaskan',
+    'Kurang Memuaskan': 'kurang',
+    'Sangat Memuaskan': 'sangat'
+}
+
+rules = []
+if os.path.exists('81_fuzzy_rules.csv'):
+    df_rules = pd.read_csv('81_fuzzy_rules.csv')
+    for _, row in df_rules.iterrows():
+        rule = ctrl.Rule(
+            informasi[mapping[row['Kejelasan Informasi']]] &
+            persyaratan[mapping[row['Kejelasan Persyaratan']]] &
+            petugas[mapping[row['Kemampuan Petugas']]] &
+            sarpras[mapping[row['Ketersediaan Sarpras']]],
+            kepuasan[mapping[row['Kepuasan Pelayanan']]]
+        )
+        rules.append(rule)
+    print(f"Berhasil memuat {len(rules)} aturan dari CSV.")
+else:
+    print("[WARNING]: File 81_fuzzy_rules.csv tidak ditemukan. Menggunakan aturan default (kosong).")
+
 
 # 4. Kontrol Sistem
 kepuasan_ctrl = ctrl.ControlSystem(rules)
@@ -64,7 +75,7 @@ try:
     persyaratan.view()
     petugas.view()
     # Pastikan folder visualisasi tersedia
-    output_dir = 'visaliasasi grafik'
+    output_dir = 'visualisasi grafik'
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
@@ -85,7 +96,7 @@ except (ValueError, KeyError):
     plt.title("Himpunan Fuzzy Output (Kepuasan Pelayanan)")
     
     # Pastikan folder visualisasi tersedia
-    output_dir = 'visaliasasi grafik'
+    output_dir = 'visualisasi grafik'
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
         

@@ -34,7 +34,7 @@ Studi kasus ini bertujuan untuk mengoptimalkan persediaan stok makanan hewan pel
   - Profit: 3.500.000 rupiah
 - **Hasil Akhir Stok Makanan:** 834,62 unit
 
-![Visualisasi Hasil Kasus 1](visaliasasi%20grafik/stok_petshop_result.png)
+![Visualisasi Hasil Kasus 1](visualisasi%20grafik/stok_petshop_result.png)
 
 **Penjelasan Grafik:**
 Grafik di atas menunjukkan fungsi keanggotaan untuk variabel output **Stok Makanan** yang terdiri dari kategori 'sedang' dan 'banyak'. Garis vertikal tebal pada nilai **834.62** merupakan hasil dari proses defuzzifikasi menggunakan metode *Centroid*. Hasil ini merepresentasikan nilai tegas (crisp) dari stok makanan yang harus disediakan berdasarkan kombinasi input barang terjual, permintaan, harga, dan profit yang telah dimasukkan.
@@ -70,19 +70,19 @@ Studi kasus ini bertujuan untuk menentukan tingkat kepuasan layanan pengaduan ma
   - Kejelasan Persyaratan: 60
   - Kemampuan Petugas: 50
   - Ketersediaan Sarpras: 90
-- **Hasil Analisis:**
-  Pada pengujian Kasus Dua dengan nilai input tersebut tidak ada aturan dari tiga belas aturan di modul yang terpenuhi. Hal ini terjadi karena nilai Kejelasan Persyaratan dan Kemampuan Petugas berada pada kategori Tidak Memuaskan, sedangkan Aturan Sepuluh sampai Tiga Belas mewajibkan kategori minimal Cukup Memuaskan untuk input tersebut agar dapat menghasilkan output.
+- **Hasil Perhitungan:**
+  Sistem kini menggunakan 81 aturan secara komprehensif dari data CSV. Dengan input yang diberikan, aturan-aturan terkait berhasil terpicu dan memproses logika fuzzy untuk memberikan hasil tingkat kepuasan pelayanan sebesar **237,14**. Angka ini masuk ke dalam kategori "Cukup".
 
-![Himpunan Fuzzy Output Kasus 2](visaliasasi%20grafik/pelayanan_variables.png)
+![Visualisasi Hasil Kasus 2](visualisasi%20grafik/pelayanan_result.png)
 
 **Penjelasan Grafik:**
-Grafik di atas menampilkan himpunan fuzzy untuk variabel output **Kepuasan Pelayanan** dengan lima kategori: 'tidak', 'kurang', 'cukup', 'memuaskan', dan 'sangat'. Berbeda dengan Kasus 1, pada grafik ini tidak muncul garis hasil perhitungan (defuzzifikasi). Hal ini dikarenakan tidak adanya aturan (*rules*) yang terpenuhi oleh kombinasi nilai input yang diuji, sehingga sistem tidak dapat mengagregasi output ke dalam nilai akhir yang spesifik.
-
+Grafik di atas menunjukkan fungsi keanggotaan untuk variabel output **Kepuasan Pelayanan**. Garis vertikal hitam tegas menunjukkan letak nilai hasil perhitungan akhir dari defuzzifikasi menggunakan metode *Centroid* di nilai **237,14**.
 
 **Output Terminal:**
 ```text
-[PERINGATAN]: Tidak ada aturan fuzzy yang terpenuhi (fired) untuk input ini.
-Grafik himpunan fuzzy output disimpan: pelayanan_variables.png
+Berhasil memuat 81 aturan dari CSV.
+Hasil Perhitungan Tingkat Kepuasan Pelayanan: 237.14
+Grafik hasil visualisasi output disimpan: visualisasi grafik\pelayanan_result.png
 ```
 
 ---

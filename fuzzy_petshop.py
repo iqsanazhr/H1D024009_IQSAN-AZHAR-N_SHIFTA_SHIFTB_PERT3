@@ -73,11 +73,11 @@ stok_makanan.view(sim=stok_simulasi)
 plt.title("Hasil Perhitungan Stok Makanan - Kasus 1")
 
 # Pastikan folder visualisasi tersedia
-output_dir = 'visaliasasi grafik'
+output_dir = 'visualisasi grafik'
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
-# Hanya simpan grafik output ke folder visaliasasi grafik
+# Hanya simpan grafik output ke folder visualisasi grafik
 save_path = os.path.join(output_dir, 'stok_petshop_result.png')
 plt.savefig(save_path)
 print(f"Grafik visualisasi output disimpan di: {save_path}")
